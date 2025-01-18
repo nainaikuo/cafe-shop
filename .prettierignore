@@ -1,0 +1,7 @@
+assets/styles/core/*.scss
+
+node_modules
+
+.nuxt
+dist
+build

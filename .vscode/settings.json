@@ -1,0 +1,29 @@
+{
+  // Required in vscode-eslint < v3.0.10 only
+  "eslint.useFlatConfig": true,
+  // "stylelint.enable": true,
+  // "css.validate": false,
+  // "less.validate": false,
+  // "scss.validate": false,
+  "editor.inlineSuggest.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.documentSelectors": [
+    "**/*.vue",
+    "**/*.ts",
+    "**/*.js",
+    "**/*.tsx",
+    "**/*.jsx",
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "prettier.configPath": ".prettierrc",
+  "stylelint.validate": ["css", "scss", "vue"],
+  "eslint.validate": ["javascript", "typescript", "vue"],
+  "i18n-ally.localesPaths": ["assets/locales"],
+  "i18n-ally.sourceLanguage": "en",
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "i18n-ally.keystyle": "nested"
+}
