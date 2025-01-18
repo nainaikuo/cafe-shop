@@ -1,8 +1,11 @@
+<script lang="ts" setup>
+
+useHead({
+  title:"咖啡廳搜尋"
+})
+
+</script>
+
 <template>
-  <h1>23</h1>
-  <p>123</p>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div>
+  <NuxtPage />
 </template>
