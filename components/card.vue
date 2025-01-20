@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+type NearestStation = {
+  station: string;
+  line: string;
+  distance: number;
+};
+
 type Data = {
   id: string;
   name: string;
@@ -17,6 +23,7 @@ type Data = {
   standing_desk: "yse" | "no";
   mrt: string;
   open_time: string;
+  nearestStation?: NearestStation | undefined;
 };
 
 const props = defineProps<{ data: Data }>();
@@ -58,36 +65,34 @@ const dataMap: Record<string, Record<string, string>> = {
   },
 };
 
-const infos = computed(() => {
-  const infoKeys: string[] = [
-    "wifi",
-    "seat",
-    "quiet",
-    "tasty",
-    "cheap",
-    "music",
-    "limited_time",
-    "socket",
-    "standing_desk",
-  ];
+const infoKeys: string[] = [
+  "wifi",
+  "seat",
+  "quiet",
+  "tasty",
+  "cheap",
+  "music",
+  "limited_time",
+  "socket",
+  "standing_desk",
+];
 
-  return Object.keys(data)
-    .map((key) => {
-      if (infoKeys.includes(key as keyof Data)) {
-        const typedKey = key as keyof Data;
-        const value = dataMap[typedKey]?.[data[typedKey]] || data[typedKey];
-        const isNumber = typeof value === "number";
-        return {
-          name: keyMap[typedKey],
-          value,
-          isNumber,
-        };
-      } else {
-        return null;
-      }
-    })
-    .filter((item) => item !== null);
-});
+const infos = Object.keys(data)
+  .map((key) => {
+    if (infoKeys.includes(key as keyof Data)) {
+      const typedKey = key as keyof Data;
+      const value = dataMap[typedKey]?.[data[typedKey]] || data[typedKey];
+      const isNumber = typeof value === "number";
+      return {
+        name: keyMap[typedKey],
+        value,
+        isNumber,
+      };
+    } else {
+      return null;
+    }
+  })
+  .filter((item) => item !== null);
 
 const addressUrl = `https://www.google.com/maps/dir//${data.address}`;
 </script>
@@ -100,7 +105,14 @@ const addressUrl = `https://www.google.com/maps/dir//${data.address}`;
     <BaseLink :href="addressUrl" class="card_address">
       <h4>{{ data.address }}</h4>
     </BaseLink>
-
+    <h5
+      v-if="data.nearestStation"
+      class="card_distance"
+      :class="data.nearestStation.line"
+    >
+      距離捷運{{ data.nearestStation.station }}站
+      {{ data.nearestStation.distance }} 公尺
+    </h5>
     <div class="card_infos">
       <template v-for="info in infos" :key="info.value">
         <p
@@ -120,7 +132,6 @@ const addressUrl = `https://www.google.com/maps/dir//${data.address}`;
 .card {
   --info-gap: 8px;
   --info-col: 6;
-
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -130,12 +141,38 @@ const addressUrl = `https://www.google.com/maps/dir//${data.address}`;
   border-radius: 4px;
   width: 100%;
   height: 100%;
+
   &_title {
     margin-bottom: 8px;
   }
 
   &_address {
+    margin-bottom: 8px;
+  }
+
+  &_distance {
     margin-bottom: 16px;
+    background: var(--mrt-color);
+    color: $white;
+    padding: 4px;
+
+    &.R {
+      --mrt-color: #{$mrt-r-line};
+    }
+    &.O {
+      --mrt-color: #{$mrt-o-line};
+      color: $black;
+    }
+    &.BL {
+      --mrt-color: #{$mrt-bl-line};
+    }
+    &.BR {
+      --mrt-color: #{$mrt-br-line};
+    }
+    &.G {
+      --mrt-color: #{$mrt-g-line};
+      color: $white;
+    }
   }
 
   &_infos {
